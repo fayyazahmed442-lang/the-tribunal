@@ -1,0 +1,8 @@
+{
+  "name": "the-tribunal",
+  "version": "1.0.0",
+  "description": "A mock court that delivers comedic verdicts on people who submit themselves as evidence.",
+  "type": "module",
+  "private": true,
+  "license": "MIT"
+}
