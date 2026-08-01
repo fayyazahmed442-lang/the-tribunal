@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Tribunal — Roast Me / Judge Me</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;700;900&family=Spectral:ital,wght@0,300;0,500;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0A0E0C;
+    --felt:#121A16;
+    --felt-2:#18221D;
+    --brass:#C8A64B;
+    --oxblood:#93283A;
+    --bone:#EDE7D9;
+    --smoke:#7E877F;
+    --edge:rgba(200,166,75,.22);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+
+  body{
+    background:var(--ink);
+    color:var(--bone);
+    font-family:'Spectral',Georgia,serif;
+    font-weight:300;
+    line-height:1.6;
+    min-height:100vh;
+    padding:0 20px 80px;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(200,166,75,.10), transparent 70%),
+      repeating-linear-gradient(0deg, rgba(255,255,255,.014) 0 1px, transparent 1px 3px);
+  }
+
+  .wrap{max-width:760px;margin:0 auto}
+
+  /* ---- Docket header ---- */
+  .docket{
+    display:flex;justify-content:space-between;align-items:baseline;
+    gap:16px;flex-wrap:wrap;
+    padding:22px 0 18px;
+    border-bottom:1px solid var(--edge);
+    font-family:'Space Mono',monospace;
+    font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--smoke);
+  }
+  .docket b{color:var(--brass);font-weight:700}
+
+  /* ---- Hero ---- */
+  .hero{padding:56px 0 40px;text-align:center}
+  .eyebrow{
+    font-family:'Space Mono',monospace;
+    font-size:11px;letter-spacing:.34em;text-transform:uppercase;
+    color:var(--brass);margin-bottom:18px;
+  }
+  h1{
+    font-family:'Big Shoulders Display',Impact,sans-serif;
+    font-weight:900;
+    font-size:clamp(58px,15vw,132px);
+    line-height:.82;
+    letter-spacing:.005em;
+    text-transform:uppercase;
+    color:var(--bone);
+  }
+  h1 em{
+    font-style:normal;display:block;color:var(--oxblood);
+    -webkit-text-stroke:1px var(--brass);
+  }
+  .dek{
+    margin:24px auto 0;max-width:430px;
+    font-size:16.5px;color:var(--smoke);font-style:italic;
+  }
+
+  /* ---- Evidence panel ---- */
+  .panel{
+    background:var(--felt);
+    border:1px solid var(--edge);
+    padding:26px 24px 24px;
+    margin-top:14px;
+  }
+  .panel-label{
+    font-family:'Space Mono',monospace;
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--brass);margin-bottom:14px;display:block;
+  }
+  textarea{
+    width:100%;min-height:132px;resize:vertical;
+    background:var(--ink);
+    border:1px solid rgba(237,231,217,.14);
+    color:var(--bone);
+    font-family:'Spectral',serif;font-size:16px;line-height:1.6;
+    padding:14px 16px;
+  }
+  textarea::placeholder{color:#5B635C;font-style:italic}
+  textarea:focus{outline:2px solid var(--brass);outline-offset:2px;border-color:transparent}
+
+  /* ---- Severity ---- */
+  .severity{margin-top:22px}
+  .seg{display:flex;gap:0;border:1px solid var(--edge);margin-top:10px}
+  .seg button{
+    flex:1;background:transparent;border:0;
+    border-right:1px solid var(--edge);
+    color:var(--smoke);cursor:pointer;
+    font-family:'Space Mono',monospace;
+    font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;
+    padding:12px 6px;transition:background .18s,color .18s;
+  }
+  .seg button:last-child{border-right:0}
+  .seg button:hover{color:var(--bone);background:rgba(200,166,75,.07)}
+  .seg button[aria-pressed="true"]{background:var(--brass);color:var(--ink);font-weight:700}
+  .seg button:focus-visible{outline:2px solid var(--bone);outline-offset:-2px}
+
+  /* ---- Actions ---- */
+  .actions{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap}
+  .btn{
+    flex:1;min-width:170px;
+    font-family:'Big Shoulders Display',sans-serif;
+    font-weight:700;font-size:23px;letter-spacing:.09em;text-transform:uppercase;
+    padding:15px 20px;cursor:pointer;
+    border:1px solid var(--brass);
+    background:transparent;color:var(--brass);
+    transition:background .18s,color .18s,transform .1s;
+  }
+  .btn:hover:not(:disabled){background:var(--brass);color:var(--ink)}
+  .btn:active:not(:disabled){transform:translateY(1px)}
+  .btn.primary{background:var(--oxblood);border-color:var(--oxblood);color:var(--bone)}
+  .btn.primary:hover:not(:disabled){background:#B03146;border-color:#B03146;color:#fff}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn:focus-visible{outline:2px solid var(--bone);outline-offset:3px}
+
+  /* ---- Deliberating ---- */
+  .waiting{
+    margin-top:34px;padding:40px 20px;text-align:center;
+    border:1px dashed var(--edge);
+    font-family:'Space Mono',monospace;
+    font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);
+  }
+  .waiting span{animation:pulse 1.4s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+
+  .error{
+    margin-top:34px;padding:20px;
+    border:1px solid var(--oxblood);
+    background:rgba(147,40,58,.12);
+    font-size:15px;
+  }
+  .error b{
+    display:block;font-family:'Space Mono',monospace;font-size:11px;
+    letter-spacing:.2em;text-transform:uppercase;color:#E0798A;margin-bottom:6px;
+  }
+
+  /* ---- Verdict ---- */
+  .verdict{margin-top:40px;position:relative}
+  .verdict.shake{animation:slam .5s cubic-bezier(.36,.07,.19,.97)}
+  @keyframes slam{
+    0%{transform:translate(0,0)}
+    12%{transform:translate(-6px,3px)}
+    26%{transform:translate(5px,-3px)}
+    42%{transform:translate(-4px,2px)}
+    62%{transform:translate(3px,-1px)}
+    100%{transform:translate(0,0)}
+  }
+
+  .stamp-zone{
+    border:1px solid var(--edge);border-bottom:0;
+    background:var(--felt-2);
+    padding:44px 24px 40px;
+    display:flex;justify-content:center;
+  }
+  .stamp{
+    border:5px double var(--oxblood);
+    color:var(--oxblood);
+    font-family:'Big Shoulders Display',sans-serif;
+    font-weight:900;font-size:clamp(26px,7.5vw,52px);
+    line-height:.95;letter-spacing:.03em;text-transform:uppercase;
+    padding:14px 26px;text-align:center;max-width:100%;
+    transform:rotate(-5.5deg);
+    opacity:.94;
+    animation:stampIn .45s cubic-bezier(.2,1.5,.4,1) both;
+  }
+  @keyframes stampIn{
+    0%{transform:rotate(-24deg) scale(3.2);opacity:0}
+    70%{opacity:.94}
+    100%{transform:rotate(-5.5deg) scale(1);opacity:.94}
+  }
+
+  .ruling{border:1px solid var(--edge);padding:26px 24px 28px;background:var(--felt)}
+  .ruling h2{
+    font-family:'Space Mono',monospace;
+    font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--brass);font-weight:400;margin-bottom:14px;
+  }
+  .ruling p.body{font-size:17px;line-height:1.68;margin-bottom:26px}
+
+  .charges{list-style:none;margin-bottom:26px}
+  .charges li{
+    display:flex;gap:14px;align-items:flex-start;
+    padding:11px 0;border-top:1px solid rgba(237,231,217,.09);
+  }
+  .charges li:last-child{border-bottom:1px solid rgba(237,231,217,.09)}
+  .charges .ct{
+    font-family:'Space Mono',monospace;font-size:11px;
+    color:var(--brass);padding-top:5px;flex-shrink:0;letter-spacing:.06em;
+  }
+  .charges .cx{font-size:15.5px;line-height:1.55}
+
+  .foot{
+    display:flex;justify-content:space-between;align-items:flex-end;
+    gap:20px;flex-wrap:wrap;
+    padding-top:22px;border-top:1px solid var(--edge);
+  }
+  .sentence{flex:1;min-width:220px}
+  .sentence span{
+    display:block;font-family:'Space Mono',monospace;font-size:10.5px;
+    letter-spacing:.2em;text-transform:uppercase;color:var(--smoke);margin-bottom:6px;
+  }
+  .sentence p{font-size:16px;font-style:italic;color:var(--bone)}
+  .score{text-align:right;line-height:1}
+  .score b{
+    font-family:'Big Shoulders Display',sans-serif;font-weight:900;
+    font-size:66px;color:var(--brass);display:block;
+  }
+  .score span{
+    font-family:'Space Mono',monospace;font-size:10.5px;
+    letter-spacing:.18em;text-transform:uppercase;color:var(--smoke);
+  }
+
+  .again{margin-top:20px;text-align:center}
+  .again button{
+    background:none;border:0;cursor:pointer;color:var(--smoke);
+    font-family:'Space Mono',monospace;font-size:11px;
+    letter-spacing:.18em;text-transform:uppercase;
+    border-bottom:1px solid var(--edge);padding-bottom:3px;
+  }
+  .again button:hover{color:var(--brass);border-color:var(--brass)}
+
+  .fineprint{
+    margin-top:44px;text-align:center;
+    font-family:'Space Mono',monospace;font-size:10px;
+    letter-spacing:.13em;color:#4E554F;line-height:1.9;
+  }
+
+  .hidden{display:none}
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+    .stamp{transform:rotate(-5.5deg)}
+  }
+  @media(max-width:520px){
+    .hero{padding:38px 0 30px}
+    .actions .btn{min-width:100%}
+    .score{text-align:left}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="docket">
+    <div>Court of Public Opinion · <b>In Session</b></div>
+    <div>Docket <b id="docketNo">№ 0000</b></div>
+  </header>
+
+  <section class="hero">
+    <p class="eyebrow">All rise</p>
+    <h1>The<br>Tribunal<em>of You</em></h1>
+    <p class="dek">Enter yourself as evidence. The court will return a verdict you did not ask for.</p>
+  </section>
+
+  <section class="panel">
+    <label class="panel-label" for="evidence">Exhibit A — the defendant, in their own words</label>
+    <textarea id="evidence" placeholder="Your job, your hobbies, your screen time, that thing you keep meaning to start on Monday. The more you admit, the worse this goes for you."></textarea>
+
+    <div class="severity">
+      <span class="panel-label" style="margin-bottom:0">Sentencing severity</span>
+      <div class="seg" role="group" aria-label="Sentencing severity">
+        <button type="button" data-sev="light" aria-pressed="false">Light singe</button>
+        <button type="button" data-sev="medium" aria-pressed="true">Medium rare</button>
+        <button type="button" data-sev="brutal" aria-pressed="false">Scorched earth</button>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" id="roastBtn">Roast me</button>
+      <button class="btn" id="judgeBtn">Judge me</button>
+    </div>
+  </section>
+
+  <div id="waiting" class="waiting hidden"><span>The bench is deliberating…</span></div>
+  <div id="error" class="error hidden"></div>
+
+  <section id="verdict" class="verdict hidden">
+    <div class="stamp-zone"><div class="stamp" id="stamp"></div></div>
+    <div class="ruling">
+      <h2 id="rulingLabel">Opinion of the court</h2>
+      <p class="body" id="opinion"></p>
+      <ul class="charges" id="charges"></ul>
+      <div class="foot">
+        <div class="sentence">
+          <span>Sentence</span>
+          <p id="sentence"></p>
+        </div>
+        <div class="score">
+          <b id="score">—</b>
+          <span id="scoreLabel">Out of 10</span>
+        </div>
+      </div>
+    </div>
+    <div class="again"><button id="appealBtn">File an appeal ↻</button></div>
+  </section>
+
+  <p class="fineprint">
+    No transcripts kept · Verdicts non-binding · The court is a comedian, not a therapist
+  </p>
+
+</div>
+
+<script>
+  const evidence   = document.getElementById('evidence');
+  const roastBtn   = document.getElementById('roastBtn');
+  const judgeBtn   = document.getElementById('judgeBtn');
+  const waiting    = document.getElementById('waiting');
+  const errorBox   = document.getElementById('error');
+  const verdictBox = document.getElementById('verdict');
+  const appealBtn  = document.getElementById('appealBtn');
+
+  let severity = 'medium';
+  let lastMode = 'roast';
+
+  document.getElementById('docketNo').textContent =
+    '№ ' + String(Math.floor(Math.random() * 9000) + 1000);
+
+  document.querySelectorAll('.seg button').forEach(b => {
+    b.addEventListener('click', () => {
+      document.querySelectorAll('.seg button').forEach(x => x.setAttribute('aria-pressed','false'));
+      b.setAttribute('aria-pressed','true');
+      severity = b.dataset.sev;
+    });
+  });
+
+  function setBusy(b){
+    roastBtn.disabled = judgeBtn.disabled = b;
+    waiting.classList.toggle('hidden', !b);
+    if (b) { errorBox.classList.add('hidden'); verdictBox.classList.add('hidden'); }
+  }
+
+  function showError(title, msg){
+    errorBox.innerHTML = '<b>' + title + '</b>' + msg;
+    errorBox.classList.remove('hidden');
+  }
+
+  async function deliberate(mode){
+    const text = evidence.value.trim();
+    if (!text){
+      showError('Objection', 'The court needs evidence. Write something about yourself in Exhibit A first.');
+      evidence.focus();
+      return;
+    }
+    lastMode = mode;
+    setBusy(true);
+
+    try{
+      const res = await fetch('/api/verdict', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ evidence: text, mode, severity })
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || ('status ' + res.status));
+
+      render(data, mode);
+    } catch(err){
+      console.error(err);
+      showError('Mistrial', 'The bench lost its train of thought. Try again — or shorten the evidence a little.');
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function render(v, mode){
+    document.getElementById('stamp').textContent = v.stamp || 'VERDICT RENDERED';
+    document.getElementById('rulingLabel').textContent =
+      mode === 'roast' ? 'The prosecution rests' : 'Opinion of the court';
+    document.getElementById('opinion').textContent = v.opinion || '';
+
+    const list = document.getElementById('charges');
+    list.innerHTML = '';
+    (v.charges || []).forEach((c, i) => {
+      const li = document.createElement('li');
+      const ct = document.createElement('div');
+      ct.className = 'ct';
+      ct.textContent = 'CT. ' + String(i + 1).padStart(2,'0');
+      const cx = document.createElement('div');
+      cx.className = 'cx';
+      cx.textContent = c;
+      li.append(ct, cx);
+      list.appendChild(li);
+    });
+
+    document.getElementById('sentence').textContent = v.sentence || '';
+    const s = Number(v.score);
+    document.getElementById('score').textContent = Number.isFinite(s) ? s : '—';
+
+    verdictBox.classList.remove('hidden');
+    verdictBox.classList.remove('shake');
+    void verdictBox.offsetWidth;
+    verdictBox.classList.add('shake');
+    verdictBox.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+
+  roastBtn.addEventListener('click', () => deliberate('roast'));
+  judgeBtn.addEventListener('click', () => deliberate('judge'));
+  appealBtn.addEventListener('click', () => deliberate(lastMode));
+
+  evidence.addEventListener('keydown', e => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') deliberate('roast');
+  });
+</script>
+</body>
+</html>
